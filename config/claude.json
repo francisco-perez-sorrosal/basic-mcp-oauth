@@ -1,0 +1,7 @@
+"basic_mcp_server": {
+  "command": "npx",
+  "args": [
+    "mcp-remote",
+    "https://basic-mcp-server.onrender.com/sse"
+  ]
+}
