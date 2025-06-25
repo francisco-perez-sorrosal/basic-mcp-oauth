@@ -91,41 +91,10 @@ This command will create a virtual environment and install all necessary depende
 pixi install
 ```
 
-## Running the Server
+## Running the Server (and the Client)
 
-Pixi tasks are defined in `pyproject.toml`:
+Pixi tasks are defined in `pyproject.toml`.
 
-### mcps (MCP Server)
-
-```bash
-pixi run mcps --transport stdio
-```
-
-### Development Mode (with auto-reload)
-
-```bash
-# Using pixi directly
-pixi run mcps --transport stdio  # or sse, streamable-http
-
-# Alternatively, using uv directly
-uv run --with "mcp[cli]" mcp run src/basic_mcp_server/main.py --transport streamable-http
-
-# Go to http://127.0.0.1:10000/mcp
-```
-
-The server will start at `http://localhost:10000`. It will automatically reload if you make changes to files in the `src/` directory.
-
-### MCP Inspection Mode
-
-```bash
-# Using pixi
-DANGEROUSLY_OMIT_AUTH=true  npx @modelcontextprotocol/inspector pixi run mcps --transport stdio
-
-# Direct execution
-DANGEROUSLY_OMIT_AUTH=true npx @modelcontextprotocol/inspector pixi run python src/basic_mcp_server/main.py --transport streamable-http
-```
-
-This starts the inspector for the MCP Server.
 
 ### Server
 
@@ -155,6 +124,15 @@ password="demo_password"
 ```
 
 and press enter. If succeeds, you'll be able to access the CLI interface and exercise `call get_time` to obtain the time from the MCP server.
+
+### MCP Inspection Mode
+
+```bash
+# Using pixi
+DANGEROUSLY_OMIT_AUTH=true  npx @modelcontextprotocol/inspector pixi
+```
+
+This starts the inspector for the MCP Server.
 
 ## Development Tasks
 
