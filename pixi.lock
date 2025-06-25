@@ -87,11 +87,12 @@ packages:
 - pypi: .
   name: basic-mcp-server
   version: 0.1.0
-  sha256: 487cae64cabe839b0d5b446e68505896b4cf2ba0d69b7b799bfb3b6930891072
+  sha256: 810dae2fe3149703ae94af89f5ba16a86a7cf9608d7fee3aaae3bb925210bf56
   requires_dist:
   - httpx>=0.28.1,<0.29
   - mcp[cli]>=1.9.2,<2
   - loguru>=0.7.3,<0.8
+  - click>=8.2.1,<9
   requires_python: '>=3.11'
   editable: true
 - conda: https://conda.anaconda.org/conda-forge/osx-arm64/bzip2-1.0.8-h99b78c6_7.conda
