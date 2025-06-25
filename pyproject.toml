@@ -21,7 +21,7 @@ classifiers = [
 dependencies = [ 
     "httpx>=0.28.1,<0.29", 
     "mcp[cli]>=1.9.2,<2", 
-    "loguru>=0.7.3,<0.8",
+    "loguru>=0.7.3,<0.8", "click>=8.2.1,<9",
 ]
 
 [project.urls]
@@ -40,7 +40,8 @@ platforms = ["osx-arm64"]
 basic_mcp_server = { path = ".", editable = true }
 
 [tool.pixi.tasks]
-mcps="pixi run python src/basic_mcp_server/main.py"
+mcps="TRANSPORT=streamable-http pixi run python src/basic_mcp_server/main.py"
+mcpc="TRANSPORT=streamable-http pixi run python src/basic_mcp_server/client.py"
 
 [tool.hatch.metadata]
 allow-direct-references = true

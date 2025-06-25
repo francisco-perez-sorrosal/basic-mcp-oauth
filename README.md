@@ -1,8 +1,21 @@
-# LinkedIn MCP Server with Anthropic Integration
+# Basic MCP Server with Basic OAuth
 
-A Python-based MCP (Model Context Protocol) server that gets stuff from your LinkedIn profile and integrates with the Anthropic API for potential analysis tasks. This project follows the `src` layout for Python packaging.
+A Python-based MCP (Model Context Protocol) server that gets the current time from the server-side.
 
-# TL;DR Install for Claude Desktop Access to the LinkedIn profile
+This project follows the `src` layout for Python packaging.
+
+# TL;DR Install for Claude Desktop Access to the MCP time server
+
+TODO: Not working yet!!! Lack the proper OAuth Config. I don't think it's possible yet!!!
+See this error when launching (in current code I `hide` the mcp variable inside a function to allow CLI parameters throught he `click` library):
+
+```bash
+$ TRANSPORT=streamable-http uv run --with "mcp[cli]" mcp run /Users/fperez/dev/basic-mcp/src/basic_mcp_server/main.py
+No server object found in /Users/fperez/dev/basic-mcp/src/basic_mcp_server/main.py. Please either:
+1. Use a standard variable name (mcp, server, or app)
+2. Specify the object name with file:object syntax3. If the server creates the FastMCP object within main()    or another function, refactor the FastMCP object to be a    global variable named mcp, server, or app.
+```
+
 
 ```bash
 # 1.a) Install the mcp server access in Claude Desktop
@@ -11,7 +24,15 @@ A Python-based MCP (Model Context Protocol) server that gets stuff from your Lin
 # 1.b) or manually integrate this JSON snippet to the `mcpServers` section of your `claude_desktop_config.json` (e.g. `~/Library/Application\ Support/Claude/claude_desktop_config.json`)
 
 {
-  "basic_mcp_server": {
+  "fps_basic_oauth_mcp_local": {
+    "command": "uv",
+    "args": ["mcp-remote", "http://localhost:10000/mcp"]
+  }
+}
+
+
+{
+  "fps_basic_oauth_mcp": {
     "command": "npx",
     "args": ["mcp-remote", "http://localhost:10000/mcp"]
   }
@@ -25,7 +46,7 @@ e.g. TODO
 
 ## Features
 
-- Serves your Basic profile from the project root
+- Serves current time from an MCP server
 - Built with FastAPI for high performance and with Pixi for dependency management and task running
 - Source code organized in the `src/` directory
 - Includes configurations for:
@@ -53,6 +74,7 @@ e.g. TODO
 ├── src/
 │   └── basic_mcp_server/
 │       ├── __init__.py
+│       ├── client.py
 │       └── main.py     # FastAPI application logic
 ├── tests/             # Test files (e.g., tests_main.py)
 ```
@@ -105,12 +127,34 @@ DANGEROUSLY_OMIT_AUTH=true npx @modelcontextprotocol/inspector pixi run python s
 
 This starts the inspector for the MCP Server.
 
-### Web scrapper
+### Server
 
 ```sh
-pixi run python src/basic_mcp_server/web_scrapper.py   
+TRANSPORT=streamable-http pixi run python src/basic_mcp_server/main.py
+
+# or
+
+pixi run mcps
 ```
 
+### Client
+
+```sh
+TRANSPORT=streamable-http pixi run python src/basic_mcp_server/client.py
+
+# or
+
+pixi run mcpc
+```
+
+Then, the client will redirect you to the basic auth page, put the following credentials:
+
+```
+user="demo_user"
+password="demo_password"
+```
+
+and press enter. If succeeds, you'll be able to access the CLI interface and exercise `call get_time` to obtain the time from the MCP server.
 
 ## Development Tasks
 
@@ -140,79 +184,21 @@ Creates sdist and wheel in `dist/`:
 pixi run build
 ```
 
-## Docker Support (Optional)
-
-### Build the Docker Image
-
-```bash
-docker build -t basic-mcp-server .
-```
-
-### Run the Docker Container
-
-TODO: Rewrite this if necessary. Docker support not yet done.
-
-## MCP Server Configuration
-
-### Local Configuration for Claude Desktop
-
-```json
-{
-  "linkedin_francisco_perez_sorrosal": {
-    "command": "uv",
-    "args": [
-      "run",
-      "--with", "mcp[cli]",
-      "--with", "pymupdf4llm",
-      "mcp", "run",
-      "src/basic_mcp_server/main.py",
-      "--transport", "streamable-http"
-    ]
-  }
-}
-```
-
 ### Remote Configuration for Claude Desktop
+
+TODO: Not working yet
 
 For connecting to a remote MCP server:
 
 ```json
 {
-  "basic_francisco_perez_sorrosal": {
+  "fps_basic_oauth_mcp": {
     "command": "npx",
     "args": ["mcp-remote", "http://localhost:10000/mcp"]
   }
 }
 ```
 
-> **Note**: Update the host and port as needed for your deployment.
-
-Currently I'm using `render.com` to host the MCP server. The configuration is in the `config/claude.json` file.
-
-Render requires `requirements.txt` to be present in the root directory. You can generate it using:
-
-```bash
-uv pip compile pyproject.toml > requirements.txt
-```
-
-Also requires `runtime.txt` to be present in the root directory with the Python version specified:
-
-```txt
-python-3.11.11
-```
-
-Remember also to set the environment variables in the render.com dashboard:
-
-```bash
-TRANSPORT=sse
-PORT=8000
-```
-
-Then you can query in Claude Desktop using the `basic_mcp_fps` MCP server to get info:
-
-```text
-TODO
-```
 
 ## License
 
